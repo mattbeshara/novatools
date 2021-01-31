@@ -14,7 +14,7 @@ Vagrant.configure(2) do |config|
 
   config.vm.provision "shell", inline: <<-SHELL
     sudo apt-get update
-    sudo apt-get install -y make gcc-msp430 libhidapi-hidraw0 mspdebug python-pip bzr linux-image-extra-$(uname -r)
+    sudo apt-get install -y make gcc-msp430 libhidapi-hidraw0 mspdebug python-pip bzr linux-image-extra-3.13.0-165-generic linux-headers-3.13.0-165-generic
 
     # udev rule to be able to access /dev/hidraw0 as vagrant user
     cp novatools/99-hidraw.rules /etc/udev/rules.d
