@@ -16,6 +16,10 @@ Vagrant.configure(2) do |config|
     sudo apt-get update
     sudo apt-get install -y make gcc-msp430 libhidapi-hidraw0 mspdebug python-pip bzr linux-image-extra-3.13.0-165-generic linux-headers-3.13.0-165-generic
 
+    # copy grub config files which use specified kernel
+    sudo cp novatools/grub.cfg /boot/grub/
+    sudo cp novatools/menu.lst /boot/grub/
+
     # udev rule to be able to access /dev/hidraw0 as vagrant user
     cp novatools/99-hidraw.rules /etc/udev/rules.d
     udevadm control --reload-rules ; udevadm trigger
