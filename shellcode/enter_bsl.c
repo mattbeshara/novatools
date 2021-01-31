@@ -1,4 +1,5 @@
-#include <intrinsics.h>
+//I commented this include out becase it was thowing an error. It seems it's unnecessary anyway.
+//#include <intrinsics.h>
 #include <msp430f5510.h>
 
 // Declare pointers to variables we access in Novatouch fw
@@ -12,8 +13,8 @@ void check_bsl_enter() {
     // read)
     *num_for_7x_c1 = *repeat_rate;
 
-    // Enter BSL if fn + f1 + f4 is pressed
-    if ((*repeat_flags & 0x9) == 0x09) {
+    // Enter BSL if fn + f1 + f2 is pressed
+    if (*repeat_flags & 0x9) {
         __dint();
         // Maybe need to slow down clock to 8 MHz also, not sure what
         // is configured by Novatouch fw

@@ -40,7 +40,7 @@ scancode_table1 = [0x03, 0x3C, 0x00, 0x2E, 0x20, 0x12, 0x00, 0x00,
 # Before sending the scancode to host over usb the scancode from the
 # first table is used as index in a second table. Could as well remap
 # keys on this level but to really simulate the actual key it's better
-# to do it in scancode_table1. Only change this if you want to add new
+# to to it in scancode_table1. Only change this if you want to add new
 # scancodes.
 scancode_table2 = [0x00, 0x35, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23,
                    0x24, 0x25, 0x26, 0x27, 0x2D, 0x2E, 0x00, 0x2A,
@@ -62,10 +62,17 @@ scancode_table2 = [0x00, 0x35, 0x1E, 0x1F, 0x20, 0x21, 0x22, 0x23,
                    0x00, 0x80, 0x00, 0x00]
 
 # See README for full id => key mapping
-key_id_ctrl = 17
-key_id_caps = 20
-key_id_backspace = 112
-key_id_backslash = 117
+# key_id_ctrl = 17
+# key_id_caps = 20
+# key_id_backspace = 112
+# key_id_backslash = 117
+
+# Let's map the keys I want to swap
+key_id_alt_l = 1
+key_id_super_l = 9
+key_id_alt_r = 89
+key_id_super_r = 105
+
 
 # Hex offsets to scancode tables in the raw original fw. These tables
 # will be overwritten by our modified tables above
@@ -99,9 +106,9 @@ def original_fw_valid(path):
         return m.hexdigest() == orig_fw_md5
 
 def write_jump_to_bsl():
-    '''Make fn + F1 + F4 jump to BSL (firmware update mode)'''
+    '''Make fn + F1 + F2 jump to BSL (firmware update mode)'''
     # Replace mov instruction with a call to our own code for checking
-    # which F keys are currently pressed. If fn + F1 + F4 is pressed
+    # which F keys are currently pressed. If fn + F1 + F2 is pressed
     # jump to 0x1000 (BSL entry addr).
 
     # bytecode for asm 'call 0xa780; nop'
@@ -110,11 +117,20 @@ def write_jump_to_bsl():
 
 if __name__ == '__main__':
     # Remap caps to ctrl
-    scancode_table1[key_id_caps] = scancode_table1[key_id_ctrl]
+    # scancode_table1[key_id_caps] = scancode_table1[key_id_ctrl]
 
     # Switch down backspace to \ and \ to backspace
-    scancode_table1[key_id_backspace], scancode_table1[key_id_backslash] = \
-        scancode_table1[key_id_backslash], scancode_table1[key_id_backspace]
+    # scancode_table1[key_id_backspace], scancode_table1[key_id_backslash] = \
+        # scancode_table1[key_id_backslash], scancode_table1[key_id_backspace]
+
+    # Switch the left alt and super
+    scancode_table1[key_id_alt_l], scancode_table1[key_id_super_l] = \
+        scancode_table1[key_id_super_l], scancode_table1[key_id_alt_l]
+
+    # Switch the right alt and super
+    scancode_table1[key_id_alt_r], scancode_table1[key_id_super_r] = \
+        scancode_table1[key_id_super_r], scancode_table1[key_id_alt_r]
+
 
     parser = argparse.ArgumentParser(
         description='Patch utility for Novatouch TKL firmware')
