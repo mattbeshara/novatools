@@ -1,0 +1,33 @@
+Please refer to the README files from the original branch by vekkt0r and
+the branch with the alt/super key remapping by NSHenry for more info.
+
+This fork started with the `patch.py` file from NSHenry's fork, because
+I wanted the alt and super keys switched, but it also has the right
+control key switched with the fn key, and the fn key remapped to the
+menu key. The menu key is virtually useless, but it is at least able to
+be remapped, to an ersatz hyper key on macOS, and a more genuine hyper
+key on OSs which use X. For some examples of how to configure a hyper
+key, see the following:
+
+https://protesilaos.com/codelog/2019-10-10-debian-xmodmap/
+
+https://brettterpstra.com/2017/06/15/a-hyper-key-with-karabiner-elements-full-instructions/
+
+Note that this remapping removes the fn key, which disables the fn-F1-F4
+key combination to enter BSL mode. This means you will be required to
+use the physical method of entering BSL mode if you want to flash your
+Novatouch again, if you flash it with this patched firmware.
+
+I found that the original `Vagrantfile` did not produce a VM that had
+working BSL flash support right away, due to (I think) missing `rawhid`
+drivers in the version of the Linux kernel used by default in the
+version of Ubuntu the VM is based on. To address this, I have modified
+the Vagrantfile to specify an older kernel version. This does not cause
+the VM to work immediately though, and in order to get BSL flashing to
+work, you are required to do `vagrant reload` after doing the initial
+`vagrant up` to load the right version of the kernel. I also had to open
+the VM in VirtualBox after doing `vagrant reload` and press `s` to get
+it to skip Ubuntu's attempts to automatically remount the shared
+`novatouch` directory. Vagrant itself should mount the directory as
+expected after Ubuntu finishes rebooting, and at that point all the
+tools necessary for doing a BSL flash over USB should work.
